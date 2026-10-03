@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darshan Jain | AI Engineer & Full-Stack Systems</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #00e5bf;
+  --primary-glow: rgba(0, 229, 191, 0.25);
+  --secondary: #0099ff;
+  --bg: #070d18;
+  --surface: #0e1726;
+  --card: rgba(15, 25, 42, 0.75);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(0, 229, 191, 0.4);
+  --text: #f0f6fc;
+  --muted: #8b9bb4;
+  --code-bg: #050a12;
+  --radius: 14px;
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.light-mode {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --card: rgba(255, 255, 255, 0.85);
+  --border: rgba(15, 23, 42, 0.08);
+  --border-focus: rgba(0, 153, 255, 0.4);
+  --text: #0f172a;
+  --muted: #475569;
+  --code-bg: #f1f5f9;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
+.container { width: min(1180px, 92%); margin: auto; position: relative; z-index: 2; }
+section { padding: 90px 0; }
+
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.navbar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(7, 13, 24, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+body.light-mode .navbar { background: rgba(248, 250, 252, 0.88); }
+.brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand span {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.nav-links { display: flex; gap: 24px; }
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--primary); }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary);
+}
+
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+}
+.btn-icon:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+.btn-primary {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: #04121e;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px var(--primary-glow);
+}
+.btn-secondary {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.hero { min-height: calc(100vh - 72px); display: flex; align-items: center; padding: 40px 0; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 50px; align-items: center; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+.hero h1 {
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+.hero h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 18px; min-height: 32px; color: var(--muted); }
+.hero h2 span { color: var(--text); border-bottom: 2px solid var(--primary); }
+.hero-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 25px; max-width: 580px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+
+.hero-visual-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.hero-img-container {
+  width: 250px;
+  height: 250px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.hero-img {
+  width: 210px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 0 45px rgba(0, 229, 191, 0.25);
+  transition: transform 0.4s ease;
+}
+.hero-img:hover { transform: scale(1.04); }
+.image-glow {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  filter: blur(45px);
+  opacity: 0.25;
+}
+.orbit {
+  position: absolute;
+  border: 1px dashed rgba(0, 229, 191, 0.3);
+  border-radius: 50%;
+  animation: spin 20s linear infinite;
+}
+.orbit-one { width: 250px; height: 250px; }
+.orbit-two { width: 290px; height: 290px; border-color: rgba(0, 153, 255, 0.2); animation-duration: 28s; animation-direction: reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.image-fallback {
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  background: linear-gradient(135deg, #102b3d, #0b1727);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--primary);
+}
+
+.interactive-panel {
+  width: 100%;
+  max-width: 440px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.panel-tabs {
+  display: flex;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+  padding: 4px 8px;
+}
+.panel-tab {
+  padding: 8px 14px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: var(--transition);
+}
+.panel-tab.active { color: var(--primary); background: rgba(0, 229, 191, 0.08); }
+.panel-content { padding: 16px; min-height: 260px; font-family: 'Fira Code', monospace; }
+
+.rag-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  font-size: 0.75rem;
+  transition: var(--transition);
+}
+.rag-step.active {
+  border-color: var(--primary);
+  background: rgba(0, 229, 191, 0.06);
+  transform: translateX(4px);
+}
+.rag-step-num { font-weight: 700; color: var(--primary); min-width: 22px; }
+.rag-step-content b { color: var(--text); display: block; margin-bottom: 2px; }
+.rag-step-content span { color: var(--muted); font-size: 0.72rem; }
+.sim-controls { margin-top: 12px; display: flex; gap: 8px; }
+.sim-btn {
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+}
+.sim-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.terminal-screen { display: none; flex-direction: column; height: 240px; font-size: 0.75rem; }
+.terminal-output { flex: 1; overflow-y: auto; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  color: var(--primary);
+}
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+}
+.quick-chips { display: flex; gap: 6px; margin-top: 8px; }
+.quick-chip {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-size: 0.68rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+.quick-chip:hover { border-color: var(--primary); color: var(--primary); }
+
+.metrics-strip {
+  background: rgba(0, 229, 191, 0.02);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 35px 0;
+}
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.metric-box { text-align: center; border-right: 1px solid var(--border); }
+.metric-box:last-child { border-right: none; }
+.metric-box strong {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.metric-box span { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+
+.glass-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(350px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), var(--primary-glow), transparent 75%);
+  pointer-events: none;
+}
+.glass-card:hover { border-color: var(--border-focus); }
+
+.section-header { margin-bottom: 40px; }
+.section-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+.section-header h2 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
+
+.skills-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+.search-box { position: relative; width: min(340px, 100%); }
+.search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  font-size: 0.82rem;
+  transition: var(--transition);
+}
+.search-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+
+.skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.skill-category h3 { font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.skill-category h3 i { color: var(--primary); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: default;
+}
+.tag:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+.tag.matched { background: var(--primary); color: #04121e; font-weight: 700; border-color: var(--primary); }
+
+.timeline { position: relative; max-width: 850px; margin: auto; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(var(--primary), transparent);
+}
+.timeline-item { position: relative; padding-left: 60px; margin-bottom: 30px; }
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+.timeline-top { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; }
+.timeline-top span:first-child { color: var(--primary); font-weight: 700; }
+.timeline-top span:last-child { color: var(--muted); font-family: 'Fira Code', monospace; }
+.timeline-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
+.timeline-card h4 { color: var(--muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 12px; }
+.timeline-card ul { padding-left: 18px; color: var(--muted); font-size: 0.82rem; }
+.timeline-card li { margin-bottom: 6px; }
+
+.project-filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
+}
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-btn.active, .filter-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #04121e;
+}
+
+.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.project-card { display: flex; flex-direction: column; }
+.project-card-header {
+  height: 120px;
+  background: linear-gradient(135deg, rgba(0, 229, 191, 0.08), rgba(0, 153, 255, 0.08));
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.project-info { padding: 22px; display: flex; flex-direction: column; flex: 1; }
+.project-info h3 { font-size: 1rem; margin-bottom: 6px; }
+.project-info p { color: var(--muted); font-size: 0.78rem; flex: 1; margin-bottom: 14px; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.project-tags span {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-family: 'Fira Code', monospace;
+}
+.inspect-btn {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+.inspect-btn:hover { background: var(--primary); color: #04121e; }
+
+.contact-box {
+  text-align: center;
+  padding: 60px 30px;
+  background: linear-gradient(180deg, rgba(0, 229, 191, 0.04), rgba(0, 153, 255, 0.02));
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.contact-box h2 { font-size: 2.2rem; margin-bottom: 12px; }
+.contact-box p { color: var(--muted); max-width: 580px; margin: 0 auto 30px; font-size: 0.95rem; }
+.contact-info-strip {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 30px;
+}
+.contact-info-strip span i { color: var(--primary); margin-right: 8px; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.modal.active { opacity: 1; pointer-events: auto; }
+.modal-window {
+  width: min(720px, 92%);
+  max-height: 85vh;
+  background: var(--surface);
+  border: 1px solid var(--primary);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+  transform: translateY(20px);
+  transition: transform 0.25s ease;
+}
+.modal.active .modal-window { transform: translateY(0); }
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 { font-size: 1.1rem; }
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+.modal-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.modal-tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.modal-tab.active { color: var(--primary); background: rgba(0, 229, 191, 0.1); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.feature-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+.feature-list li { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.feature-list li i { color: var(--primary); }
+
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  color: #79c0ff;
+  overflow-x: auto;
+}
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: var(--primary);
+  color: #04121e;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 3000;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+@media(max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual-side { order: -1; }
+  .project-grid { grid-template-columns: repeat(2, 1fr); }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .metric-box { border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+@media(max-width: 640px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .feature-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <nav class="navbar">
+    <a class="brand" href="#hero">
+      <span>Darshan.AI</span>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Systems</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="themeToggle" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
+      <button class="btn-primary" onclick="copyContact()">Hire Me <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">
+            <span class="pulse-dot"></span> Available for AI Engineering & Systems Roles
+          </div>
+          <h1>Darshan Jain</h1>
+          <h2>Engineering <span id="typedRole">Autonomous AI Systems</span></h2>
+          <p class="hero-desc">
+            Master of Computer Applications (Artificial Intelligence) candidate building high-reliability Agentic AI workflows, vector search pipelines (FAISS), and resilient full-stack web platforms.
+          </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn-primary">Inspect System Architecture <i class="fas fa-terminal"></i></a>
+            <a href="#contact" class="btn-secondary">Get in Touch <i class="fas fa-paper-plane"></i></a>
+          </div>
+        </div>
+
+        <div class="hero-visual-side">
+          <div class="hero-img-container">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="image-glow"></div>
+            <img src="file:///C:/Users/kunal/OneDrive/Desktop/projects/portfolio%20management/home%20pic.png"
+                 alt="Darshan Jain"
+                 class="hero-img"
+                 onerror="this.style.display='none';document.getElementById('imageFallback').style.display='flex';">
+            <div id="imageFallback" class="image-fallback" style="display:none;">
+              <i class="fas fa-user-astronaut" style="font-size:3rem;margin-bottom:8px"></i>
+              <span>Darshan Jain</span>
+            </div>
+          </div>
+
+          <div class="interactive-panel">
+            <div class="panel-tabs">
+              <button class="panel-tab active" data-view="rag">RAG Pipeline Simulator</button>
+              <button class="panel-tab" data-view="cli">Dev Console (CLI)</button>
+            </div>
+            
+            <div class="panel-content">
+              <div id="ragView">
+                <div class="rag-step" id="step1">
+                  <span class="rag-step-num">01</span>
+                  <div class="rag-step-content">
+                    <b>User Natural Query</b>
+                    <span>"How does RAG avoid LLM hallucinations?"</span>
+                  </div>
+                </div>
+                <div class="rag-step" id="step2">
+                  <span class="rag-step-num">02</span>
+                  <div class="rag-step-content">
+                    <b>Dense Text Embeddings</b>
+                    <span>Generates 768-dim vector embeddings</span>
+                  </div>
+                </div>
+                <div class="rag-step" id="step3">
+                  <span class="rag-step-num">03</span>
+                  <div class="rag-step-content">
+                    <b>FAISS Similarity Index</b>
+                    <span>Top-k cosine similarity chunk retrieval</span>
+                  </div>
+                </div>
+                <div class="rag-step" id="step4">
+                  <span class="rag-step-num">04</span>
+                  <div class="rag-step-content">
+                    <b>Contextual Augmentation & LLM</b>
+                    <span>Verified grounded answer dispatch</span>
+                  </div>
+                </div>
+
+                <div class="sim-controls">
+                  <button class="sim-btn" onclick="stepSimulator()"><i class="fas fa-play"></i> Step Pipeline</button>
+                  <button class="sim-btn" onclick="resetSimulator()"><i class="fas fa-rotate-left"></i> Reset</button>
+                </div>
+              </div>
+
+              <div id="cliView" class="terminal-screen">
+                <div class="terminal-output" id="terminalOutput">
+                  <div>Type <b style="color:var(--primary)">help</b> to inspect available developer operations.</div>
+                </div>
+                <div class="terminal-input-row">
+                  <span>❯</span>
+                  <input type="text" id="cliInput" class="terminal-input" placeholder="Type command..." autocomplete="off">
+                </div>
+                <div class="quick-chips">
+                  <span class="quick-chip" onclick="execCmd('skills')">skills</span>
+                  <span class="quick-chip" onclick="execCmd('rag')">rag</span>
+                  <span class="quick-chip" onclick="execCmd('contact')">contact</span>
+                  <span class="quick-chip" onclick="execCmd('clear')">clear</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="metrics-strip">
+      <div class="container metrics-grid">
+        <div class="metric-box">
+          <strong class="counter" data-target="8.63" data-decimals="2">0</strong>
+          <span>MCA CGPA / 10.0</span>
+        </div>
+        <div class="metric-box">
+          <strong class="counter" data-target="8" data-suffix="+">0</strong>
+          <span>Deployed Systems</span>
+        </div>
+        <div class="metric-box">
+          <strong class="counter" data-target="2">0</strong>
+          <span>Industry Residencies</span>
+        </div>
+        <div class="metric-box">
+          <strong class="counter" data-target="100" data-suffix="%">0</strong>
+          <span>Code Ownership</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">01 / Foundation</span>
+          <h2>Background & Engineering Focus</h2>
+        </div>
+        <div class="glass-card">
+          <p style="margin-bottom:14px;color:var(--muted);font-size:0.95rem;">
+            Currently pursuing an <strong style="color:var(--text)">MCA in Artificial Intelligence at Parul University</strong>, after earning a BCA in Computer Science with an 8.37 CGPA. I specialize in bridging autonomous agent intelligence with deterministic full-stack web platforms.
+          </p>
+          <p style="color:var(--muted);font-size:0.95rem;">
+            My technical focus centers on reducing LLM hallucination using vector grounding (FAISS), designing decoupled backend microservices, and writing clean, scalable TypeScript/Python interfaces for enterprise workflows.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <div class="skills-controls">
+          <div class="section-header" style="margin-bottom:0">
+            <span class="section-tag">02 / Capabilities</span>
+            <h2>Technical Stack</h2>
+          </div>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="skillSearchInput" class="search-input" placeholder="Search stack (e.g., FAISS, React, Python)...">
+          </div>
+        </div>
+
+        <div class="skills-grid">
+          <div class="glass-card skill-category">
+            <h3><i class="fas fa-brain"></i> AI, ML & GenAI Architecture</h3>
+            <div class="skill-tags">
+              <span class="tag">Agentic AI</span>
+              <span class="tag">Retrieval-Augmented Gen (RAG)</span>
+              <span class="tag">FAISS</span>
+              <span class="tag">Vector Embeddings</span>
+              <span class="tag">Gemini API</span>
+              <span class="tag">Python</span>
+              <span class="tag">Streamlit</span>
+              <span class="tag">Pandas</span>
+              <span class="tag">NumPy</span>
+            </div>
+          </div>
+
+          <div class="glass-card skill-category">
+            <h3><i class="fas fa-code"></i> Full-Stack Engineering</h3>
+            <div class="skill-tags">
+              <span class="tag">React.js</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">JavaScript (ES6+)</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">Express.js</span>
+              <span class="tag">Django</span>
+              <span class="tag">Tailwind CSS</span>
+              <span class="tag">RESTful APIs</span>
+            </div>
+          </div>
+
+          <div class="glass-card skill-category">
+            <h3><i class="fas fa-database"></i> Persistence & Vector Stores</h3>
+            <div class="skill-tags">
+              <span class="tag">FAISS Vector Index</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">Firebase Firestore</span>
+              <span class="tag">SQLite</span>
+              <span class="tag">Relational Schemas</span>
+            </div>
+          </div>
+
+          <div class="glass-card skill-category">
+            <h3><i class="fas fa-microchip"></i> Core CS & Tooling</h3>
+            <div class="skill-tags">
+              <span class="tag">Data Structures & Algorithms</span>
+              <span class="tag">OOP Design</span>
+              <span class="tag">Git / GitHub CI</span>
+              <span class="tag">Java</span>
+              <span class="tag">C/C++</span>
+              <span class="tag">n8n Automation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">03 / Experience</span>
+          <h2>Professional History</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-icon"><i class="fas fa-robot"></i></div>
+            <div class="glass-card timeline-card">
+              <div class="timeline-top">
+                <span>APPLIED AI RESIDENCY</span>
+                <span>Jul 2026 – Sep 2026</span>
+              </div>
+              <h3>AI Intern — Autonomous Systems & RAG</h3>
+              <h4>Capabl India · Remote</h4>
+              <ul>
+                <li>Engineered localized RAG pipelines utilizing FAISS vector stores to supply verified organizational context to LLMs.</li>
+                <li>Implemented autonomous multi-step agentic workflows capable of task decomposition and dynamic tool-calling.</li>
+                <li>Authored Python scripts for schema extraction, document ingestion, and cosine similarity ranking.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-icon"><i class="fas fa-laptop-code"></i></div>
+            <div class="glass-card timeline-card">
+              <div class="timeline-top">
+                <span>FRONTEND ENGINEERING INTERN</span>
+                <span>Jun 2025 – Jul 2025</span>
+              </div>
+              <h3>Frontend Developer Intern</h3>
+              <h4>MATE (Mavrik Solutions Pvt. Ltd.)</h4>
+              <ul>
+                <li>Engineered responsive, accessible client interfaces using React.js and Tailwind CSS with sub-100ms render budgets.</li>
+                <li>Modularized design systems into atomic UI units, reducing CSS redundancy by 30%.</li>
+                <li>Resolved cross-browser compatibility issues across modern rendering engines (Blink, Gecko, WebKit).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">04 / Systems</span>
+          <h2>Featured Architectures</h2>
+        </div>
+
+        <div class="project-filter-bar">
+          <button class="filter-btn active" data-filter="all">All Systems</button>
+          <button class="filter-btn" data-filter="ai">AI / RAG</button>
+          <button class="filter-btn" data-filter="web">Full-Stack</button>
+          <button class="filter-btn" data-filter="backend">Backend & DB</button>
+        </div>
+
+        <div class="project-grid" id="projectContainer"></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <span class="section-tag">05 / Collaboration</span>
+          <h2>Let's Build Something High-Impact</h2>
+          <p>I am seeking full-time AI Engineer, GenAI, and Full-Stack development positions. Reach out directly for project inquiries or interview discussions.</p>
+          <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+            <a href="mailto:darshanjain1957@gmail.com" class="btn-primary"><i class="fas fa-envelope"></i> Send Direct Email</a>
+            <a href="https://www.linkedin.com/in/darshan-jain-646070261/" target="_blank" class="btn-secondary"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <button class="btn-secondary" onclick="copyContact()"><i class="fas fa-copy"></i> Copy Email</button>
+          </div>
+          <div class="contact-info-strip">
+            <span><i class="fas fa-envelope"></i> darshanjain1957@gmail.com</span>
+            <span><i class="fas fa-phone"></i> +91-8306404576</span>
+            <span><i class="fas fa-map-marker-alt"></i> Vadodara, Gujarat, India</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="techModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="modalTitle">System Architecture</h3>
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button class="modal-tab active" onclick="switchModalTab('overview')">Overview</button>
+          <button class="modal-tab" onclick="switchModalTab('pipeline')">Pipeline Flow</button>
+          <button class="modal-tab" onclick="switchModalTab('code')">Code Spec</button>
+        </div>
+        
+        <div id="tabOverview" class="tab-pane active">
+          <p id="modalDesc" style="color:var(--muted);font-size:0.85rem;margin-bottom:15px;"></p>
+          <strong style="font-size:0.82rem;">Key Capabilities:</strong>
+          <ul id="modalFeatures" class="feature-list"></ul>
+        </div>
+
+        <div id="tabPipeline" class="tab-pane">
+          <p style="color:var(--muted);font-size:0.82rem;margin-bottom:12px;">Data ingestion and request execution sequence:</p>
+          <div class="code-block" id="modalPipeline"></div>
+        </div>
+
+        <div id="tabCode" class="tab-pane">
+          <p style="color:var(--muted);font-size:0.82rem;margin-bottom:12px;">Core Logic / Integration Pattern:</p>
+          <pre class="code-block" id="modalCode"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+const projects = [
+  {
+    cat: ['ai', 'web'],
+    icon: 'fa-heart-pulse',
+    title: 'AuraHealth AI',
+    desc: 'Diagnostic intelligence and triage platform utilizing Google Gemini LLM API with automated symptom grading and GPS hospital locator.',
+    tech: ['React.js', 'TypeScript', 'Gemini API', 'Node.js', 'Express', 'Geolocation'],
+    features: ['Real-time symptom vector analysis', 'Emergency hospital GPS locator', 'Role-based access controls', 'Deterministic triage scoring'],
+    pipeline: 'Client Query -> Express Gateway -> Gemini Embeddings -> Cosine Match -> Output Sanitizer',
+    code: `async function triageSymptom(query: string) {\n  const response = await aiClient.generate({\n    model: 'gemini-1.5-pro',\n    systemInstruction: 'You are a clinical triage evaluator...'\n  });\n  return sanitizePayload(response);\n}`
+  },
+  {
+    cat: ['ai', 'web'],
+    icon: 'fa-plane-departure',
+    title: 'AI Rajasthan Travel Concierge',
+    desc: 'Conversational travel planning platform combining custom LLM prompts with interactive dynamic map routing via Leaflet Maps.',
+    tech: ['React', 'TypeScript', 'Node.js', 'Google Gemini', 'Leaflet API'],
+    features: ['Dynamic route coordinate plotting', 'Automated budget computation', 'Multi-day itinerary compilation', 'Leaflet tile rendering'],
+    pipeline: 'Prompt Params -> Budget Estimator -> Gemini Engine -> LatLng Extractor -> Leaflet GeoJSON',
+    code: `const generateItinerary = async (budget, days) => {\n  const plan = await llm.compileRoute({ budget, duration: days });\n  renderMapMarkers(plan.coordinates);\n};`
+  },
+  {
+    cat: ['backend', 'web'],
+    icon: 'fa-boxes-stacked',
+    title: 'Django Stock Alerts & Bulk CSV',
+    desc: 'Asynchronous inventory ledger employing Django Signals for event-driven low-stock alerting and high-throughput transactional CSV processing.',
+    tech: ['Python', 'Django', 'React', 'PostgreSQL', 'Django Signals'],
+    features: ['Transactional CSV batch ingestion', 'Automated email trigger via signals', 'ACID compliant inventory ledger', 'RESTful API endpoints'],
+    pipeline: 'CSV Upload -> In-Memory Validation -> Transaction.atomic() -> DB Bulk Create -> Signal Dispatched',
+    code: `@receiver(post_save, sender=StockItem)\ndef check_threshold(sender, instance, **kwargs):\n    if instance.quantity <= instance.reorder_level:\n        trigger_restock_dispatch(instance.sku)`
+  },
+  {
+    cat: ['web', 'backend'],
+    icon: 'fa-comments',
+    title: 'Acme Proof Testimonial Engine',
+    desc: 'Social proof management tool featuring embeddable JavaScript review widgets, JWT authentication, and Wall of Love layout engines.',
+    tech: ['React', 'TypeScript', 'Node.js', 'Express', 'SQLite', 'JWT'],
+    features: ['External script injection widgets', 'JWT token verification', 'Custom layout rendering', 'Review moderation dashboard'],
+    pipeline: 'Third-party Client -> CDN Widget Bundle -> Authenticated REST API -> SQLite Ledger',
+    code: `(function(w,d,s,o,f,js,fjs){\n  w['AcmeProofWidget']=o;\n  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];\n  js.src='https://cdn.acmeproof.io/v1.js';fjs.parentNode.insertBefore(js,fjs);\n}(window,document,'script','acme'));`
+  },
+  {
+    cat: ['web', 'backend'],
+    icon: 'fa-hands-helping',
+    title: 'Disaster Management Response Hub',
+    desc: 'Emergency response coordination portal enabling citizen incident broadcasting and real-time administrative resource allocation.',
+    tech: ['PHP', 'MySQL', 'JavaScript', 'Bootstrap', 'REST APIs'],
+    features: ['Incident reporting dispatch', 'Resource allocation grid', 'MySQL transactional security', 'Dynamic status dashboards'],
+    pipeline: 'Incident Alert -> DB Incident Table -> Administrative Triage -> Dispatch Notification',
+    code: `$stmt = $pdo->prepare("INSERT INTO incidents (type, location, severity) VALUES (?, ?, ?)");\n$stmt->execute([$type, $latlng, $severity]);`
+  },
+  {
+    cat: ['web'],
+    icon: 'fa-folder-tree',
+    title: 'Client-Side Directory Inspector',
+    desc: '100% browser-based directory parser leveraging HTML5 File System Access API for recursive AST visualization and storage metrics without server uploads.',
+    tech: ['React', 'TypeScript', 'Vite', 'File System API', 'Tailwind CSS'],
+    features: ['Zero-upload local security', 'Recursive file tree traversal', 'Syntax preview engine', 'Memory usage breakdown'],
+    pipeline: 'Local Directory Access Handle -> Recursive Tree Traversal -> File Read -> In-Memory AST Render',
+    code: `async function inspectDirectory(dirHandle) {\n  for await (const entry of dirHandle.values()) {\n    if (entry.kind === 'file') yield entry.getFile();\n  }\n}`
+  }
+];
+
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: null, y: null, radius: 120 };
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+class NodeParticle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+    if (mouse.x && mouse.y) {
+      const dx = mouse.x - this.x;
+      const dy = mouse.y - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < mouse.radius) {
+        const force = (mouse.radius - dist) / mouse.radius;
+        this.x -= (dx / dist) * force * 2;
+        this.y -= (dy / dist) * force * 2;
+      }
+    }
+  }
+  draw() {
+    ctx.fillStyle = 'rgba(0, 229, 191, 0.3)';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function initNodes() {
+  particles = [];
+  const count = Math.min(50, Math.floor((canvas.width * canvas.height) / 22000));
+  for(let i=0; i < count; i++) particles.push(new NodeParticle());
+}
+initNodes();
+
+function loopNodes() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for(let i=0; i<particles.length; i++) {
+    particles[i].update();
+    particles[i].draw();
+    for(let j=i+1; j<particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < 110) {
+        ctx.strokeStyle = `rgba(0, 229, 191, ${0.12 * (1 - dist / 110)})`;
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(loopNodes);
+}
+loopNodes();
+
+document.querySelectorAll('.glass-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  });
+});
+
+let curStep = 1;
+function stepSimulator() {
+  document.querySelectorAll('.rag-step').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById(`step${curStep}`);
+  if(target) target.classList.add('active');
+  curStep = curStep >= 4 ? 1 : curStep + 1;
+}
+function resetSimulator() {
+  curStep = 1;
+  document.querySelectorAll('.rag-step').forEach(el => el.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+}
+resetSimulator();
+
+const cliInput = document.getElementById('cliInput');
+const cliOutput = document.getElementById('terminalOutput');
+
+function execCmd(cmd) {
+  const line = document.createElement('div');
+  line.innerHTML = `<span style="color:var(--primary)">❯ ${cmd}</span>`;
+  cliOutput.appendChild(line);
+
+  let response = '';
+  switch(cmd.toLowerCase().trim()) {
+    case 'help':
+      response = 'Commands: skills, rag, projects, contact, clear';
+      break;
+    case 'skills':
+      response = 'Agentic AI • RAG Pipelines • FAISS • React.js • TypeScript • Python • Django';
+      break;
+    case 'rag':
+      response = 'FAISS index vector search with cosine distance metric for grounded context retrieval.';
+      break;
+    case 'projects':
+      response = 'Showing 6 featured enterprise architectures in Projects grid.';
+      document.getElementById('projects').scrollIntoView();
+      break;
+    case 'contact':
+      response = 'Email: darshanjain1957@gmail.com | Phone: +91-8306404576';
+      break;
+    case 'clear':
+      cliOutput.innerHTML = '';
+      return;
+    default:
+      response = `Command '${cmd}' not recognized. Type 'help' for options.`;
+  }
+  const reply = document.createElement('div');
+  reply.style.color = '#10b981';
+  reply.textContent = response;
+  cliOutput.appendChild(reply);
+  cliOutput.scrollTop = cliOutput.scrollHeight;
+}
+
+if(cliInput) {
+  cliInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && cliInput.value.trim()) {
+      execCmd(cliInput.value.trim());
+      cliInput.value = '';
+    }
+  });
+}
+
+document.querySelectorAll('.panel-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const view = tab.getAttribute('data-view');
+    if(view === 'rag') {
+      document.getElementById('ragView').style.display = 'block';
+      document.getElementById('cliView').style.display = 'none';
+    } else {
+      document.getElementById('ragView').style.display = 'none';
+      document.getElementById('cliView').style.display = 'flex';
+    }
+  });
+});
+
+const searchInput = document.getElementById('skillSearchInput');
+if(searchInput) {
+  searchInput.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    document.querySelectorAll('.skill-tags .tag').forEach(tag => {
+      const match = q && tag.textContent.toLowerCase().includes(q);
+      tag.classList.toggle('matched', Boolean(match));
+    });
+  });
+}
+
+const projectContainer = document.getElementById('projectContainer');
+function renderProjects(filter = 'all') {
+  projectContainer.innerHTML = '';
+  projects.forEach((p, idx) => {
+    if(filter !== 'all' && !p.cat.includes(filter)) return;
+    const card = document.createElement('div');
+    card.className = 'glass-card project-card';
+    card.innerHTML = `
+      <div class="project-card-header"><i class="fas ${p.icon}"></i></div>
+      <div class="project-info">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="project-tags">${p.tech.slice(0, 4).map(t => `<span>${t}</span>`).join('')}</div>
+        <button class="inspect-btn" onclick="openModal(${idx})">Inspect Architecture <i class="fas fa-arrow-right"></i></button>
+      </div>
+    `;
+    projectContainer.appendChild(card);
+  });
+}
+renderProjects();
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.dataset.filter);
+  });
+});
+
+const modal = document.getElementById('techModal');
+function openModal(idx) {
+  const p = projects[idx];
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalFeatures').innerHTML = p.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
+  document.getElementById('modalPipeline').textContent = p.pipeline;
+  document.getElementById('modalCode').textContent = p.code;
+  modal.classList.add('active');
+}
+function closeModal() { modal.classList.remove('active'); }
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+window.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+function switchModalTab(tabKey) {
+  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  
+  if(tabKey === 'overview') {
+    document.querySelectorAll('.modal-tab')[0].classList.add('active');
+    document.getElementById('tabOverview').classList.add('active');
+  } else if(tabKey === 'pipeline') {
+    document.querySelectorAll('.modal-tab')[1].classList.add('active');
+    document.getElementById('tabPipeline').classList.add('active');
+  } else {
+    document.querySelectorAll('.modal-tab')[2].classList.add('active');
+    document.getElementById('tabCode').classList.add('active');
+  }
+}
+
+let animated = false;
+window.addEventListener('scroll', () => {
+  const strip = document.querySelector('.metrics-strip');
+  if(!strip || animated) return;
+  const rect = strip.getBoundingClientRect();
+  if(rect.top < window.innerHeight) {
+    animated = true;
+    document.querySelectorAll('.counter').forEach(c => {
+      const target = parseFloat(c.getAttribute('data-target'));
+      const dec = parseInt(c.getAttribute('data-decimals') || 0);
+      const suffix = c.getAttribute('data-suffix') || '';
+      let cur = 0;
+      const step = target / 50;
+      const timer = setInterval(() => {
+        cur += step;
+        if(cur >= target) {
+          c.textContent = target.toFixed(dec) + suffix;
+          clearInterval(timer);
+        } else {
+          c.textContent = cur.toFixed(dec) + suffix;
+        }
+      }, 25);
+    });
+  }
+});
+
+const themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  themeBtn.querySelector('i').className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+});
+
+function copyContact() {
+  navigator.clipboard.writeText('darshanjain1957@gmail.com').then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+</script>
+
+</body>
+</html>
